@@ -4,8 +4,12 @@ import { useHistory, Link } from "react-router-dom";
 import Dropzone from "react-dropzone";
 import NavBar from "../../components/NavBar";
 import { registerMeme } from "../../redux/actions/hub";
+import Web3 from "web3"
 
 function CreateMeme(props) {
+  const NETWORK_URL = "http://127.0.0.1:8545";
+  const web3 = new Web3(new Web3.providers.HttpProvider(NETWORK_URL));
+
   const { bucket, registerMeme } = props;
   const history = useHistory();
 
@@ -93,7 +97,8 @@ function CreateMeme(props) {
           fileReader.onload = async function () {
             arrayBuffer = this.result;
             uint8Array = new Uint8Array(arrayBuffer);
-            let addressArr = await window.web3.eth.getAccounts();
+            let addressArr = '';
+            await web3.eth.getAccounts().then(function(acc){ addressArr = acc })
             registerMeme({
               address: addressArr[0],
               fileBuffer: uint8Array,

@@ -21,7 +21,7 @@ export const newClientDB = async () => {
     {
       key: process.env.USER_API_KEY,
       secret: process.env.USER_API_SECRET,
-      type: 0,
+      // type: 0,
     },
     API
   );

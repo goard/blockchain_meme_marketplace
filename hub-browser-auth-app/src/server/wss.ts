@@ -66,6 +66,7 @@ const wss = route.all("/ws/userauth", (ctx) => {
                 /** Wait for the challenge event from our event emitter */
                 emitter.on("challenge", (sig) => {
                   /** Resolve the promise with the challenge response */
+                  // @ts-ignore: Unreachable code error
                   resolve(Buffer.from(sig));
                 });
                 /** Give client a reasonable timeout to respond to the challenge */

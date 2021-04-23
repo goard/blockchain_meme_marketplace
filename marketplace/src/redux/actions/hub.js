@@ -1,5 +1,5 @@
 import types from "../constants";
-import { Buckets } from "@textile/hub";
+import { Buckets, UserAuth } from "@textile/hub";
 import { Libp2pCryptoIdentity } from "@textile/threads-core";
 import {
   getTotalSupply,
@@ -164,8 +164,8 @@ class HubClient {
   createBucket = async () => {
     /** Authenticate and open a Bucket */
     this.buckets = await Buckets.withUserAuth(this.auth);
-    const root = await this.buckets.open("memes");
-    this.bucketKey = root.key;
+    const root = await this.buckets.getOrCreate("memes");
+    this.bucketKey = root.root.key;
     return this.buckets;
   };
 
@@ -231,10 +231,8 @@ export const registerMeme = (payload) => async () => {
 
   document.getElementById("registerMeme").innerText =
     "Adding meme to Textile Bucket...";
-
   // add meme to bucket
   const result = await hubClient.addFileToBucket(name, fileBuffer);
-
   document.getElementById("registerMeme").innerText =
     "Registering Meme NFT on Local Blockchain...";
 
@@ -258,7 +256,6 @@ export const registerMeme = (payload) => async () => {
 export const getMemeTokenList = () => async (dispatch) => {
   // Get the total count of meme tokens
   const totalSupply = parseInt((await getTotalSupply())["0"]);
-
   // Create a request to blockchain to get the meme metadata and owner for each token
   let metadataPromiseArr = [];
   let ownerPromiseArr = [];
